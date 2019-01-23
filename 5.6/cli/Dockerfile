@@ -132,9 +132,8 @@ RUN set -xe \
 		igbinaryVersion=2.0.5 \
 		memcachedVersion=2.2.0 \
 		redisVersion=3.1.6 \
-		yamlVersion=1.3.1 \
+		yamlVersion=1.3.2 \
 		memcacheVersion=3.0.8 \
-		swooleVersion=2.0.12 \
 	&& cd /usr/local/src \
 	&& curl -fSL http://pecl.php.net/get/msgpack-${msgpackVersion}.tgz -o msgpack-${msgpackVersion}.tgz \
 	&& tar zxf msgpack-${msgpackVersion}.tgz \
@@ -206,28 +205,6 @@ RUN set -xe \
 	&& make install \
 	&& rm -rf /usr/local/src/yaml-${yamlVersion} \
 	&& echo "extension=yaml.so" >> ${PHP_INI_DIR}/php/yaml.ini \
-	\
-	&& cd /usr/local/src \
-	&& curl -fSL https://github.com/redis/hiredis/archive/v0.13.3.tar.gz -o hiredis-0.13.3.tar.gz \
-	&& tar zxf hiredis-0.13.3.tar.gz \
-	&& rm -rf hiredis-0.13.3.tar.gz \
-	&& cd hiredis-0.13.3 \
-	&& make -j "$(nproc)" \
-	&& make install \
-	&& rm -rf /usr/local/src/hiredis-0.13.3 \
-	\
-	&& cd /usr/local/src \
-	&& curl -fSL http://pecl.php.net/get/swoole-${swooleVersion}.tgz -o swoole-${swooleVersion}.tgz \
-	&& tar zxf swoole-${swooleVersion}.tgz \
-	&& rm -rf swoole-${swooleVersion}.tgz \
-	&& cd swoole-${swooleVersion} \
-	&& phpize \
-	&& ./configure --enable-http2 --enable-openssl --enable-sockets --enable-mysqlnd --enable-async-redis \
-	&& make -j "$(nproc)" \
-	&& make install \
-	&& rm -rf /usr/local/src/swoole-${swooleVersion} \
-	&& echo "extension=swoole.so" >> ${PHP_INI_DIR}/php/swoole.ini \
-	\
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $buildDeps
 
 # Add configuration files
